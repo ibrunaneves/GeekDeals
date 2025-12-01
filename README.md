@@ -66,6 +66,7 @@ Diagramas incluídos no projeto:
 
 ## Estrutura Geral do Projeto
 
+```
 geek-deals/
 ├── backend/
 │ ├── src/
@@ -91,31 +92,14 @@ geek-deals/
 └── docs/
 ├── diagrams/
 └── readme-assets/
-
----
-
-## Testes Manuais Recomendados
-
-Registrar novo usuário
-Login com email/senha → receber tempToken
-Inserir código 2FA válido → receber JWT
-Acessar rota protegida /products com JWT
-Visualizar listagem no frontend web
-Visualizar listagem no mobile
-
-## Equipe
-
-Bruna – Backend Core
-Íthalo – Autenticação 2FA + Serviços
-Felipe – Frontend Web
-Neto – Mobile + Documentação
+```
 
 ---
 
 ## Como Rodar o Projeto
 
 ### Backend
-```bash
+bash
 cd backend
 npm install
 cp .env.example .env
@@ -134,4 +118,18 @@ cd mobile
 npm install
 npx expo start
 
+---
 
+### Testes Manuais Recomendados
+
+Registrar novo usuário
+Login com email/senha → receber tempToken
+Inserir código 2FA válido → receber JWT
+Acessar rota protegida /products com JWT
+Visualizar listagem no frontend web
+Visualizar listagem no mobile
+
+Bruna – Backend Core  
+Ithalo – Autenticação 2FA + Serviços  
+Felipe – Frontend Web  
+Neto – Mobile + Documentação
