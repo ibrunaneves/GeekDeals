@@ -1,3 +1,9 @@
+/**
+ * Modelo de Produto/Oferta
+ * type pode ser: game, hardware, collectible, accessory
+ * expiryDate é quando a oferta expira
+ */
+
 import mongoose from 'mongoose';
 
 const ProductSchema = new mongoose.Schema({

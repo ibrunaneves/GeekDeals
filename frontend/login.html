@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Geek Deals</title>
+    <meta name="description" content="Faça login no Geek Deals">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app">
+        <main class="auth-page">
+            <!-- Branding Side (Desktop) -->
+            <div class="auth-branding">
+                <div class="auth-branding-content">
+                    <h1>Geek Deals</h1>
+                    <p>Sua plataforma de ofertas para games, hardware e tudo que um verdadeiro geek precisa.</p>
+
+                    <div class="auth-features">
+                        <div class="auth-feature">
+                            <div class="auth-feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="auth-feature-text">
+                                <h3>Segurança</h3>
+                                <p>Autenticação em duas etapas</p>
+                            </div>
+                        </div>
+                        <div class="auth-feature">
+                            <div class="auth-feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="auth-feature-text">
+                                <h3>Ofertas em tempo real</h3>
+                                <p>Alertas de promoções urgentes</p>
+                            </div>
+                        </div>
+                        <div class="auth-feature">
+                            <div class="auth-feature-icon">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                            <div class="auth-feature-text">
+                                <h3>Para Geeks</h3>
+                                <p>Games, hardware e acessórios</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Side -->
+            <div class="auth-form-side">
+                <div class="auth-container">
+                    <div class="auth-header fade-in">
+                        <div class="auth-logo">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h1 class="auth-title">Geek Deals</h1>
+                        <p class="auth-subtitle" id="page-subtitle">Entre na sua conta</p>
+                    </div>
+
+                    <div class="auth-card fade-in delay-1">
+                        <div id="alert-error" class="alert alert-error" style="display: none;">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span id="error-message"></span>
+                        </div>
+
+                        <div id="alert-success" class="alert alert-success" style="display: none;">
+                            <i class="fas fa-check-circle"></i>
+                            <span id="success-message"></span>
+                        </div>
+
+                        <!-- STEP 1: Login Form -->
+                        <form id="login-form">
+                            <div class="input-group">
+                                <label for="email">Email</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-envelope icon"></i>
+                                    <input type="email" id="email" name="email" placeholder="seu@email.com"
+                                        autocomplete="email" required>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="password">Senha</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-lock icon"></i>
+                                    <input type="password" id="password" name="password" placeholder="********"
+                                        autocomplete="current-password" required>
+                                    <button type="button" class="toggle-password"
+                                        onclick="togglePassword('password', 'password-icon')">
+                                        <i class="fas fa-eye" id="password-icon"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block" id="btn-login">
+                                <span id="btn-login-text">Entrar</span>
+                                <i class="fas fa-arrow-right" id="btn-login-icon"></i>
+                            </button>
+                        </form>
+
+                        <!-- STEP 2: 2FA Form -->
+                        <form id="twofa-form" style="display: none;">
+                            <div class="twofa-info">
+                                <p><i class="fas fa-envelope"></i> Código enviado para <strong
+                                        id="masked-email"></strong></p>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="code">Código de verificação</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-key icon"></i>
+                                    <input type="text" id="code" name="code" placeholder="000000" maxlength="6"
+                                        pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required
+                                        style="letter-spacing: 8px; font-size: 20px; text-align: center;">
+                                </div>
+                            </div>
+
+                            <p class="twofa-timer">
+                                <i class="fas fa-clock"></i> Expira em <span id="timer">10:00</span>
+                            </p>
+
+                            <button type="submit" class="btn btn-primary btn-block" id="btn-verify">
+                                <span id="btn-verify-text">Verificar</span>
+                                <i class="fas fa-check" id="btn-verify-icon"></i>
+                            </button>
+
+                            <div class="twofa-actions">
+                                <button type="button" class="btn btn-secondary" onclick="resendCode()" id="btn-resend">
+                                    <i class="fas fa-redo"></i> Reenviar
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="backToLogin()">
+                                    <i class="fas fa-arrow-left"></i> Voltar
+                                </button>
+                            </div>
+                        </form>
+
+                        <p class="auth-footer" id="register-link">
+                            Não tem conta? <a href="register.html">Criar conta</a>
+                        </p>
+                    </div>
+
+                    <p class="auth-footer fade-in delay-2" style="margin-top: 32px;">
+                        Unifacisa - 2025
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let tempToken = null;
+        let timerInterval = null;
+        let userEmail = '';
+
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        }
+
+        function maskEmail(email) {
+            const [local, domain] = email.split('@');
+            return `${local.substring(0, 2)}***@${domain}`;
+        }
+
+        function startTimer(seconds) {
+            let remaining = seconds;
+            const timerEl = document.getElementById('timer');
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(remaining / 60);
+                const secs = remaining % 60;
+                timerEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    timerEl.textContent = 'Expirado';
+                    timerEl.style.color = 'var(--danger)';
+                }
+                remaining--;
+            }, 1000);
+        }
+
+        function showTwoFAStep() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('twofa-form').style.display = 'block';
+            document.getElementById('register-link').style.display = 'none';
+            document.getElementById('page-subtitle').textContent = 'Verificação de Segurança';
+            document.getElementById('masked-email').textContent = maskEmail(userEmail);
+            document.getElementById('code').focus();
+            startTimer(600);
+        }
+
+        function backToLogin() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('twofa-form').style.display = 'none';
+            document.getElementById('register-link').style.display = 'block';
+            document.getElementById('page-subtitle').textContent = 'Entre na sua conta';
+            document.getElementById('alert-error').style.display = 'none';
+            document.getElementById('alert-success').style.display = 'none';
+            clearInterval(timerInterval);
+            tempToken = null;
+        }
+
+        async function resendCode() {
+            const btn = document.getElementById('btn-resend');
+            btn.disabled = true;
+            document.getElementById('alert-error').style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/2fa/resend`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: tempToken })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message);
+
+                document.getElementById('alert-success').style.display = 'flex';
+                document.getElementById('success-message').textContent = 'Novo código enviado!';
+                startTimer(data.expiresIn || 600);
+            } catch (error) {
+                document.getElementById('alert-error').style.display = 'flex';
+                document.getElementById('error-message').textContent = error.message;
+            } finally {
+                setTimeout(() => btn.disabled = false, 30000);
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login');
+            const btnText = document.getElementById('btn-login-text');
+            const btnIcon = document.getElementById('btn-login-icon');
+
+            userEmail = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            btn.disabled = true;
+            btnText.textContent = 'Entrando...';
+            btnIcon.className = 'fas fa-spinner fa-spin';
+            document.getElementById('alert-error').style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail, password })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message);
+
+                if (data.tempToken) {
+                    tempToken = data.tempToken;
+                    showTwoFAStep();
+                } else if (data.accessToken || data.token) {
+                    localStorage.setItem('token', data.accessToken || data.token);
+                    localStorage.setItem('userEmail', userEmail);
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                document.getElementById('alert-error').style.display = 'flex';
+                document.getElementById('error-message').textContent = error.message;
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = 'Entrar';
+                btnIcon.className = 'fas fa-arrow-right';
+            }
+        });
+
+        document.getElementById('twofa-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-verify');
+            const btnText = document.getElementById('btn-verify-text');
+            const btnIcon = document.getElementById('btn-verify-icon');
+            const code = document.getElementById('code').value;
+
+            if (code.length !== 6) {
+                document.getElementById('alert-error').style.display = 'flex';
+                document.getElementById('error-message').textContent = 'Digite o código de 6 dígitos';
+                return;
+            }
+
+            btn.disabled = true;
+            btnText.textContent = 'Verificando...';
+            btnIcon.className = 'fas fa-spinner fa-spin';
+            document.getElementById('alert-error').style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/2fa/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: tempToken, code })
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message);
+
+                localStorage.setItem('token', data.accessToken || data.token);
+                localStorage.setItem('userEmail', userEmail);
+
+                document.getElementById('alert-success').style.display = 'flex';
+                document.getElementById('success-message').textContent = 'Login realizado!';
+                setTimeout(() => window.location.href = 'index.html', 1000);
+            } catch (error) {
+                document.getElementById('alert-error').style.display = 'flex';
+                document.getElementById('error-message').textContent = error.message;
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = 'Verificar';
+                btnIcon.className = 'fas fa-check';
+            }
+        });
+    </script>
+
+    <style>
+        .twofa-info {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .twofa-info p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .twofa-info strong {
+            color: var(--primary);
+        }
+
+        .twofa-timer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .twofa-timer span {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .twofa-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .twofa-actions .btn {
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 14px;
+        }
+    </style>
+</body>
+
+</html>

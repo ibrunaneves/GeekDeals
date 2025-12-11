@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geek Deals - Ofertas para Geeks</title>
+    <meta name="description" content="As melhores ofertas em games, hardware, colecionáveis e acessórios geek">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-brand">
+                    <div class="header-logo">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h1 class="header-title">Geek Deals</h1>
+                </div>
+
+                <nav class="header-nav">
+                    <a href="#" class="active">Todas</a>
+                    <a href="#" data-filter="game">Games</a>
+                    <a href="#" data-filter="hardware">Hardware</a>
+                    <a href="#" data-filter="collectible">Colecionáveis</a>
+                    <a href="#" data-filter="accessory">Acessórios</a>
+                </nav>
+
+                <div class="header-actions">
+                    <span class="header-greeting">
+                        Olá, <strong id="user-name">Geek</strong>
+                    </span>
+                    <button class="menu-toggle" onclick="toggleMenu()" title="Menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button class="btn-logout" onclick="logout()" title="Sair">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="mobile-menu">
+            <button class="mobile-menu-close" onclick="toggleMenu()">
+                <i class="fas fa-times"></i>
+            </button>
+            <a href="#" class="active" onclick="filterFromMenu('all')">Todas as Ofertas</a>
+            <a href="#" onclick="filterFromMenu('game')">Games</a>
+            <a href="#" onclick="filterFromMenu('hardware')">Hardware</a>
+            <a href="#" onclick="filterFromMenu('collectible')">Colecionáveis</a>
+            <a href="#" onclick="filterFromMenu('accessory')">Acessórios</a>
+        </div>
+
+        <main class="home-page">
+            <div class="container main-content">
+                <div class="dashboard-layout">
+                    <!-- Sidebar -->
+                    <aside class="sidebar">
+                        <div class="sidebar-card">
+                            <h3 class="sidebar-title">Resumo</h3>
+                            <div class="sidebar-stats">
+                                <div class="sidebar-stat">
+                                    <span class="sidebar-stat-label">Total</span>
+                                    <span class="sidebar-stat-value" id="stat-total">0</span>
+                                </div>
+                                <div class="sidebar-stat">
+                                    <span class="sidebar-stat-label">Ativas</span>
+                                    <span class="sidebar-stat-value highlight" id="stat-active">0</span>
+                                </div>
+                                <div class="sidebar-stat">
+                                    <span class="sidebar-stat-label">Urgentes</span>
+                                    <span class="sidebar-stat-value" id="stat-urgent"
+                                        style="color: var(--warning);">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h3 class="sidebar-title">Categoria</h3>
+                            <div class="filter-options">
+                                <button class="filter-btn full-width active" data-filter="all">
+                                    <i class="fas fa-th-large"></i> Todas
+                                </button>
+                                <button class="filter-btn" data-filter="game">
+                                    <i class="fas fa-gamepad"></i> Games
+                                </button>
+                                <button class="filter-btn" data-filter="hardware">
+                                    <i class="fas fa-microchip"></i> Hardware
+                                </button>
+                                <button class="filter-btn" data-filter="collectible">
+                                    <i class="fas fa-star"></i> Colecionáveis
+                                </button>
+                                <button class="filter-btn" data-filter="accessory">
+                                    <i class="fas fa-headphones"></i> Acessórios
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h3 class="sidebar-title">Status</h3>
+                            <div class="filter-options">
+                                <button class="filter-btn full-width status-btn active" data-status="all">
+                                    <i class="fas fa-list"></i> Todas
+                                </button>
+                                <button class="filter-btn status-btn" data-status="active">
+                                    <i class="fas fa-check"></i> Ativas
+                                </button>
+                                <button class="filter-btn status-btn" data-status="expired">
+                                    <i class="fas fa-clock"></i> Expiradas
+                                </button>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Main Content -->
+                    <section class="products-section">
+                        <div class="section-header">
+                            <h2 class="section-title">Ofertas do Dia</h2>
+                            <span class="section-count" id="products-count">0 ofertas</span>
+                        </div>
+
+                        <div id="loading" class="loading">
+                            <div class="spinner"></div>
+                            <p class="loading-text">Carregando ofertas...</p>
+                        </div>
+
+                        <div id="empty-state" class="empty-state" style="display: none;">
+                            <div class="empty-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <h3 class="empty-title">Sem ofertas no momento</h3>
+                            <p class="empty-subtitle">Novas ofertas chegando em breve!</p>
+                        </div>
+
+                        <div id="products-grid" class="products-grid"></div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                Unifacisa - 2025 | Geek Deals
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        checkAuth();
+
+        let allProducts = [];
+        let currentFilter = 'all';
+        let currentStatus = 'all';
+
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+            document.getElementById('user-name').textContent = userEmail.split('@')[0];
+        }
+
+        loadProducts();
+
+        // Toggle menu mobile
+        function toggleMenu() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        }
+
+        // Filtrar do menu mobile
+        function filterFromMenu(filter) {
+            currentFilter = filter;
+            renderProducts();
+            toggleMenu();
+
+            // Atualizar active states
+            document.querySelectorAll('.mobile-menu a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+        }
+
+        // Filter buttons - Categoria
+        document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderProducts();
+            });
+        });
+
+        // Filter buttons - Status
+        document.querySelectorAll('.status-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentStatus = btn.dataset.status;
+                renderProducts();
+            });
+        });
+
+        // Header nav links
+        document.querySelectorAll('.header-nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.header-nav a').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                currentFilter = link.dataset.filter || 'all';
+
+                // Sync sidebar
+                document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.filter === currentFilter);
+                });
+
+                renderProducts();
+            });
+        });
+
+        async function loadProducts() {
+            const loading = document.getElementById('loading');
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/api/products`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+
+                allProducts = await response.json();
+                loading.style.display = 'none';
+
+                updateStats();
+                renderProducts();
+
+            } catch (error) {
+                console.error('Erro ao carregar produtos:', error);
+                loading.innerHTML = `
+                    <i class="fas fa-exclamation-circle" style="font-size: 48px; color: var(--danger);"></i>
+                    <p class="loading-text">Erro ao carregar ofertas</p>
+                    <button class="btn btn-secondary" onclick="location.reload()" style="margin-top: 16px;">
+                        <i class="fas fa-refresh"></i> Tentar novamente
+                    </button>
+                `;
+            }
+        }
+
+        function updateStats() {
+            const now = new Date();
+            const active = allProducts.filter(p => new Date(p.expiryDate) >= now);
+            const urgent = allProducts.filter(p => {
+                const days = Math.ceil((new Date(p.expiryDate) - now) / (1000 * 60 * 60 * 24));
+                return days >= 0 && days <= 3;
+            });
+
+            document.getElementById('stat-total').textContent = allProducts.length;
+            document.getElementById('stat-active').textContent = active.length;
+            document.getElementById('stat-urgent').textContent = urgent.length;
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const emptyState = document.getElementById('empty-state');
+            const countEl = document.getElementById('products-count');
+            const now = new Date();
+
+            let filtered = allProducts;
+
+            // Filtrar por categoria
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(p => p.type?.toLowerCase() === currentFilter);
+            }
+
+            // Filtrar por status
+            if (currentStatus === 'active') {
+                filtered = filtered.filter(p => new Date(p.expiryDate) >= now);
+            } else if (currentStatus === 'expired') {
+                filtered = filtered.filter(p => new Date(p.expiryDate) < now);
+            }
+
+            countEl.textContent = `${filtered.length} oferta${filtered.length !== 1 ? 's' : ''}`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            grid.innerHTML = filtered.map((product, index) => {
+                const isExpired = new Date(product.expiryDate) < now;
+                const daysLeft = Math.ceil((new Date(product.expiryDate) - now) / (1000 * 60 * 60 * 24));
+                const config = getTypeConfig(product.type);
+
+                return `
+                    <div class="product-card fade-in ${isExpired ? 'expired' : ''}" style="animation-delay: ${index * 0.05}s;">
+                        <div class="product-header">
+                            <span class="badge badge-${config.class}">
+                                <i class="${config.icon}"></i>
+                                ${config.label}
+                            </span>
+                            ${!isExpired && daysLeft <= 3 ? `
+                                <span class="badge badge-urgent">
+                                    ${daysLeft === 0 ? 'HOJE' : daysLeft + 'D'}
+                                </span>
+                            ` : ''}
+                        </div>
+                        
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        
+                        <div class="product-footer">
+                            <span class="product-price">${formatPrice(product.price)}</span>
+                            <span class="product-timer ${isExpired ? 'expired' : ''} ${!isExpired && daysLeft <= 3 ? 'urgent' : ''}">
+                                <i class="fas ${isExpired ? 'fa-times-circle' : 'fa-clock'}"></i>
+                                ${isExpired ? 'Expirado' : daysLeft + 'd restantes'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getTypeConfig(type) {
+            const configs = {
+                'game': { icon: 'fas fa-gamepad', class: 'game', label: 'Game' },
+                'hardware': { icon: 'fas fa-microchip', class: 'hardware', label: 'Hardware' },
+                'software': { icon: 'fas fa-code', class: 'software', label: 'Software' },
+                'collectible': { icon: 'fas fa-star', class: 'collectible', label: 'Colecionável' },
+                'accessory': { icon: 'fas fa-headphones', class: 'accessory', label: 'Acessório' },
+                'acessorio': { icon: 'fas fa-headphones', class: 'accessory', label: 'Acessório' },
+                'periferico': { icon: 'fas fa-desktop', class: 'hardware', label: 'Periférico' }
+            };
+            return configs[type?.toLowerCase()] || { icon: 'fas fa-box', class: 'game', label: type || 'Outro' };
+        }
+    </script>
+</body>
+
+</html>
