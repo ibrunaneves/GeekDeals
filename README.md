@@ -1,10 +1,11 @@
-# Geek Deals 
+# Geek Deals
 
 ## Sobre o Projeto
+
 A **Geek Deals** é um sistema completo de ofertas personalizadas para uma loja geek.  
 A solução inclui um **backend em Node.js + MongoDB**, um **frontend web** e um **aplicativo mobile**, todos integrados no mesmo servidor.
 
-Usuários podem se cadastrar, realizar **login com email e senha**, e visualizar produtos geek que podem estar em promoção conforme seus interesses.
+Usuários podem se cadastrar, realizar **login com autenticação em duas etapas (2FA por email)**, e visualizar produtos geek filtrados por categoria.
 
 ---
 
@@ -12,98 +13,109 @@ Usuários podem se cadastrar, realizar **login com email e senha**, e visualizar
 
 ### Backend (Node.js + MongoDB)
 - Cadastro de usuários (nome, CPF, email, senha)
-- Login com email + senha
+- **Login com 2FA** (código de 6 dígitos enviado por email)
 - Emissão de token JWT para rotas autenticadas
 - Proteção de rotas privadas com middleware
 - CRUD de produtos geek contendo:
-  - nome  
-  - tipo  
-  - preço  
-  - descrição  
-  - data de validade  
-- Separação clara:
-  - controllers
-  - routers
-  - models
-  - middlewares
-- Middleware para filtragem de requisições
+  - nome
+  - tipo (game, hardware, collectible, accessory)
+  - preço
+  - descrição
+  - data de validade
+- Envio de emails com Nodemailer (Ethereal em dev, SMTP em prod)
 
 ---
 
 ### Frontend Web
 - Tela de cadastro de usuários
-- Login com email e senha
-- Home exibindo lista de produtos
-- Interface simples e responsiva
+- Login com email, senha e **verificação 2FA**
+- Home com lista de produtos e **filtros por categoria**
+- Layout desktop-friendly com sidebar
+- Interface responsiva (dark theme, glassmorphism)
 
 ---
 
 ### Aplicativo Mobile (Expo / React Native)
-- Login com email e senha
-- Home exibindo lista de produtos consumidos da API
-- Interface objetiva e funcional
+- Login com email, senha e **verificação 2FA**
+- Home com lista de produtos consumidos da API
+- **Filtros por categoria** (chips horizontais)
+- Pull-to-refresh para atualizar ofertas
+- Interface moderna com gradientes e animações
 
 ---
 
 ## Tecnologias Utilizadas
 
 ### Backend
-- Node.js  
-- Express  
-- MongoDB + Mongoose  
-- JWT  
-- Bcrypt  
-- Middlewares customizados  
+- Node.js
+- Express
+- MongoDB + Mongoose
+- JWT (jsonwebtoken)
+- Bcrypt
+- Nodemailer (emails 2FA)
+- Ethereal Email (ambiente de desenvolvimento)
 
 ### Frontend Web
-- HTML  
-- CSS / Bootstrap  
-- JavaScript  
-- Axios / Fetch API  
+- HTML5
+- CSS3 (design system customizado)
+- JavaScript (Vanilla)
+- Fetch API
 
 ### Mobile
-- React Native  
-- Expo  
+- React Native
+- Expo
+- Axios
+- React Navigation
+- AsyncStorage
 
 ---
 
 ## Diagramas do Sistema
-Os seguintes diagramas acompanham o projeto, conforme solicitado pelo professor:
+
+Os diagramas estão documentados em [DIAGRAMS.md](./DIAGRAMS.md):
 
 - **Diagrama de Casos de Uso**
-- **Diagrama de Classes (backend)**
-- **Diagrama de Sequência – Login + 2FA (simulação apenas)**
+- **Diagrama de Classes**
+- **Diagrama de Sequência – Login com 2FA**
+- **Diagrama de Sequência – Visualizar Ofertas**
+- **Arquitetura do Sistema**
 
 ---
 
-## Estrutura Geral do Projeto
+## Estrutura do Projeto
 
 ```
-geek-deals/
+GeekDeals/
 ├── backend/
-│ ├── src/
-│ │ ├── config/
-│ │ ├── controllers/
-│ │ ├── middlewares/
-│ │ ├── models/
-│ │ ├── routes/
-│ │ └── index.js
-│ ├── package.json
-│ └── .env.example
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── middlewares/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── index.js
+│   ├── package.json
+│   └── .env
 │
-├── frontend-web/
-│ ├── public/
-│ ├── src/
-│ └── index.html
+├── frontend/
+│   ├── index.html
+│   ├── login.html
+│   ├── register.html
+│   ├── styles.css
+│   └── app.js
 │
 ├── mobile/
-│ ├── App.js
-│ └── package.json
+│   ├── App.js
+│   ├── src/
+│   │   ├── screens/
+│   │   ├── contexts/
+│   │   └── services/
+│   └── package.json
 │
-└── docs/
-├── diagrams/
-└── readme-assets/
+├── DIAGRAMS.md
+└── README.md
 ```
+
 ---
 
 ## Como Rodar o Projeto
@@ -112,49 +124,51 @@ geek-deals/
 ```bash
 cd backend
 npm install
-cp .env.example .env
-npm start
+npm run dev
 ```
-Backend disponível em:
-http://localhost:3000
+Backend disponível em: http://localhost:3000
 
-### Frontend
+> Em desenvolvimento, os códigos 2FA são exibidos no console e podem ser visualizados no link do Ethereal Email.
+
+### Frontend Web
+```bash
+cd frontend
+npx serve .
 ```
-cd frontend-web
-npm install
-npm start
-```
+Frontend disponível em: http://localhost:3000 (ou porta alternativa)
 
 ### Mobile
-```
+```bash
 cd mobile
 npm install
 npx expo start
 ```
+Escaneie o QR code com o app Expo Go no celular.
 
-## Testes Manuais Recomendados
+---
 
-### Backend
-- Registrar novo usuário  
-- Login com email/senha → receber token JWT  
-- Acessar rota protegida `/products` usando o token  
-- Criar, listar, atualizar e deletar produtos autenticado  
+## Testes Recomendados
 
-### Frontend Web
-- Realizar cadastro  
-- Fazer login  
-- Visualizar produtos na Home  
+### Fluxo de Login com 2FA
+1. Registrar novo usuário
+2. Fazer login com email/senha
+3. Receber código 2FA (ver no console do backend ou link Ethereal)
+4. Inserir código na tela de verificação
+5. Acessar a Home com a lista de produtos
 
-### Mobile
-- Logar no app mobile  
-- Visualizar produtos carregados da API  
+### Filtros de Categoria
+- Testar filtros: Todos, Games, Hardware, Colecionáveis, Acessórios
+- Verificar contador de ofertas atualizando
 
 ---
 
 ## Equipe
-- **Bruna** – Backend  
-- **Ithalo** – Serviços e suporte às integrações  
-- **Felipe** – Frontend Web  
-- **Neto** – Mobile + Documentação  
 
+- **Bruna** – Backend
+- **Ithalo** – Serviços e integrações
+- **Felipe** – Frontend Web
+- **Neto** – Mobile + Documentação
 
+---
+
+**Unifacisa - 2025**
